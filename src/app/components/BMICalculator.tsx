@@ -26,6 +26,7 @@ const BMICalculator = () => {
   const [feet, setFeet] = useState<number | "">("");
   const [inches, setInches] = useState<number | "">("");
   const [displayWeight, setDisplayWeight] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const convertFeetInchesToCm = (feet: number, inches: number): number => {
     return (feet * 30.48) + (inches * 2.54);
@@ -56,36 +57,40 @@ const BMICalculator = () => {
 
   const calculateBMI = () => {
     if (!height || !weight) return;
-
-    // Convert height to meters regardless of input unit
-    const heightInMeters = height / 100; // height is already in cm from both inputs
-
-    // Convert weight to kg regardless of input unit
-    const weightInKg = weightUnit === "lbs" ? weight : Number(weight);
-
-    const bmiValue = weightInKg / (heightInMeters * heightInMeters);
-    setBmi(parseFloat(bmiValue.toFixed(2)));
-
-    let classificationText = "";
-    if (bmiValue < 18.5) classificationText = "Underweight";
-    else if (bmiValue >= 18.5 && bmiValue < 25.0) classificationText = "Normal";
-    else if (bmiValue >= 25.0 && bmiValue < 28.0) classificationText = "Acceptable";
-    else if (bmiValue >= 28.0 && bmiValue < 29.9) classificationText = "Overweight";
-    else if (bmiValue >= 30.0 && bmiValue < 34.9) classificationText = "Obese (Class 1)";
-    else if (bmiValue >= 35.0 && bmiValue < 39.9) classificationText = "Obese (Class 2)";
-    else classificationText = "Obese (Class 3)";
-
-    setClassification(classificationText);
-
-    const minWeight = 18.5 * (heightInMeters * heightInMeters);
-    const maxWeight = 24.9 * (heightInMeters * heightInMeters);
-    setNormalWeightRange([parseFloat(minWeight.toFixed(2)), parseFloat(maxWeight.toFixed(2))]);
-
-    if (classificationText !== "Normal" && classificationText !== "Acceptable") {
-      setWeightToLose(parseFloat((weightInKg - maxWeight).toFixed(2)));
-    } else {
-      setWeightToLose(null);
-    }
+    
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      const heightInMeters = height / 100;
+      
+      const weightInKg = weightUnit === "lbs" ? weight : Number(weight);
+  
+      const bmiValue = weightInKg / (heightInMeters * heightInMeters);
+      setBmi(parseFloat(bmiValue.toFixed(1)));
+  
+      let classificationText = "";
+      if (bmiValue < 18.5) classificationText = "Underweight";
+      else if (bmiValue >= 18.5 && bmiValue < 25.0) classificationText = "Normal";
+      else if (bmiValue >= 25.0 && bmiValue < 28.0) classificationText = "Acceptable";
+      else if (bmiValue >= 28.0 && bmiValue < 29.9) classificationText = "Overweight";
+      else if (bmiValue >= 30.0 && bmiValue < 34.9) classificationText = "Obese (Class 1)";
+      else if (bmiValue >= 35.0 && bmiValue < 39.9) classificationText = "Obese (Class 2)";
+      else classificationText = "Obese (Class 3)";
+  
+      setClassification(classificationText);
+  
+      const minWeight = 18.5 * (heightInMeters * heightInMeters);
+      const maxWeight = 24.9 * (heightInMeters * heightInMeters);
+      setNormalWeightRange([parseFloat(minWeight.toFixed(2)), parseFloat(maxWeight.toFixed(2))]);
+  
+      if (classificationText !== "Normal" && classificationText !== "Acceptable") {
+        setWeightToLose(parseFloat((weightInKg - maxWeight).toFixed(2)));
+      } else {
+        setWeightToLose(null);
+      }
+      
+      setIsLoading(false);
+    }, 1000); 
   };
   
   const resetForm = () => {
@@ -122,13 +127,24 @@ const BMICalculator = () => {
       <div className="mt-4">
         <label className="block font-semibold text-gray-800">Height</label>
         <div className="flex flex-col space-y-2">
-          {heightUnit === "cm" ? (
+        {heightUnit === "cm" ? (
             <input
                 type="number"
                 inputMode="decimal"
                 pattern="[0-9]*"
                 value={height}
-                onChange={(e) => handleHeightChange(Number(e.target.value), "cm")}
+                onChange={(e) => {
+                const newValue = e.target.value;
+                if (newValue === "" || newValue === "0") {
+                    setHeight("");
+                    const { feet, inches } = convertCmToFeetInches(0);
+                    setFeet("");
+                    setInches("");
+                } else {
+                    setHeight(Number(newValue));
+                    handleHeightChange(Number(newValue), "cm");
+                }
+                }}
                 className="w-full p-2 border rounded-md text-gray-800"
                 placeholder="Height in cm"
             />
@@ -139,7 +155,15 @@ const BMICalculator = () => {
                 inputMode="decimal"
                 pattern="[0-9]*"
                 value={feet}
-                onChange={(e) => handleFeetInchesChange(Number(e.target.value), Number(inches))}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue === "" || newValue === "0") {
+                    setFeet("");
+                  } else {
+                    setFeet(Number(newValue));
+                    handleFeetInchesChange(Number(newValue), Number(inches || 0));
+                  }
+                }}
                 className="w-1/2 p-2 border rounded-md text-gray-800"
                 placeholder="Feet"
                 />
@@ -148,7 +172,15 @@ const BMICalculator = () => {
                 inputMode="decimal"
                 pattern="[0-9]*"
                 value={inches}
-                onChange={(e) => handleFeetInchesChange(Number(feet), Number(e.target.value))}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  if (newValue === "" || newValue === "0") {
+                    setInches("");
+                  } else {
+                    setInches(Number(newValue));
+                    handleFeetInchesChange(Number(feet || 0), Number(newValue));
+                  }
+                }}
                 className="w-1/2 p-2 border rounded-md text-gray-800"
                 placeholder="Inches"
                 />
@@ -189,10 +221,11 @@ const BMICalculator = () => {
         value={displayWeight}
         onChange={(e) => {
             const newValue = e.target.value;
-            setDisplayWeight(newValue);
-            if (newValue === "") {
+            if (newValue === "" || newValue === "0") {
+            setDisplayWeight("");
             setWeight("");
             } else {
+            setDisplayWeight(newValue);
             const newWeight = Number(newValue);
             if (weightUnit === "kg") {
                 setWeight(newWeight);
@@ -203,7 +236,8 @@ const BMICalculator = () => {
         }}
         className="w-full p-2 border rounded-md text-gray-800"
         placeholder={`Weight in ${weightUnit}`}
-        />
+    />
+
     <div className="flex space-x-2">
       <button
         onClick={() => {
@@ -240,20 +274,26 @@ const BMICalculator = () => {
   </div>
 </div>
 
-      <button
+        <button
         onClick={calculateBMI}
         className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md"
-      >
+        >
         Calculate BMI
-      </button>
+        </button>
 
-      {bmi !== null && (
+        {isLoading && (
+            <div className="mt-4 flex justify-center">
+                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            )}
+
+      {!isLoading && bmi !== null && (
   <div className="mt-6 p-4 bg-gray-100 rounded-md">
     <h2 className="text-lg font-bold text-gray-800 mb-4">Results</h2>
     <div className="text-center mb-6">
-      <p className="text-xl text-gray-800 mb-2">Your BMI is</p>
-      <p className="text-4xl font-bold text-gray-900 mb-2">{bmi}</p>
-      <div className={`inline-block px-4 py-2 rounded-full text-black font-bold ${
+        <p className="text-xl text-gray-800 mb-2">Your BMI is</p>
+        <p className="text-4xl font-bold text-gray-900 mb-2">{bmi?.toFixed(1)}</p>
+        <div className={`inline-block px-4 py-2 rounded-full text-black font-bold ${
         bmi < 18.5 ? BMI_COLORS.underweight :
         bmi < 25.0 ? BMI_COLORS.normal :
         bmi < 28.0 ? BMI_COLORS.acceptable :
@@ -275,7 +315,7 @@ const BMICalculator = () => {
 
     {weightToLose !== null && weightToLose > 0 ? (
     <p className="mt-2 text-lg text-red-500 mb-6 bg-red-100 text-center rounded-md p-2">
-        You need to lose <strong>{weightToLose} kg</strong> to be in the normal weight range.
+        Your target weight loss is<br/><strong>{weightToLose} kg</strong><br/> to be in the normal weight range.
     </p>
     ) : classification === "Normal" ? (
     <p className="mt-2 text-lg text-gray-900 mb-6 font-bold bg-green-500 text-center rounded-md p-2">
