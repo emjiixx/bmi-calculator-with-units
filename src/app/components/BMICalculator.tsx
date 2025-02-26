@@ -110,11 +110,13 @@ const BMICalculator = () => {
       <div className="mt-4">
         <label className="block font-semibold text-gray-800">Age</label>
         <input
-          type="number"
-          value={age}
-          onChange={(e) => setAge(Number(e.target.value))}
-          className="w-full p-2 border rounded-md text-gray-800"
-        />
+            type="number"
+            inputMode="decimal"
+            pattern="[0-9]*"
+            value={age}
+            onChange={(e) => setAge(Number(e.target.value))}
+            className="w-full p-2 border rounded-md text-gray-800"
+            />
       </div>
 
       <div className="mt-4">
@@ -122,28 +124,34 @@ const BMICalculator = () => {
         <div className="flex flex-col space-y-2">
           {heightUnit === "cm" ? (
             <input
-              type="number"
-              value={height}
-              onChange={(e) => handleHeightChange(Number(e.target.value), "cm")}
-              className="w-full p-2 border rounded-md text-gray-800"
-              placeholder="Height in cm"
+                type="number"
+                inputMode="decimal"
+                pattern="[0-9]*"
+                value={height}
+                onChange={(e) => handleHeightChange(Number(e.target.value), "cm")}
+                className="w-full p-2 border rounded-md text-gray-800"
+                placeholder="Height in cm"
             />
           ) : (
             <div className="flex space-x-2">
               <input
                 type="number"
+                inputMode="decimal"
+                pattern="[0-9]*"
                 value={feet}
                 onChange={(e) => handleFeetInchesChange(Number(e.target.value), Number(inches))}
                 className="w-1/2 p-2 border rounded-md text-gray-800"
                 placeholder="Feet"
-              />
-              <input
+                />
+                <input
                 type="number"
+                inputMode="decimal"
+                pattern="[0-9]*"
                 value={inches}
                 onChange={(e) => handleFeetInchesChange(Number(feet), Number(e.target.value))}
                 className="w-1/2 p-2 border rounded-md text-gray-800"
                 placeholder="Inches"
-              />
+                />
             </div>
           )}
           <div className="flex space-x-2">
@@ -175,26 +183,27 @@ const BMICalculator = () => {
   <label className="block font-semibold text-gray-800">Weight</label>
   <div className="flex flex-col space-y-2">
     <input
-      type="number"
-      value={displayWeight}
-      onChange={(e) => {
-        const newValue = e.target.value;
-        setDisplayWeight(newValue);
-        if (newValue === "") {
-          setWeight("");
-        } else {
-          const newWeight = Number(newValue);
-          if (weightUnit === "kg") {
-            setWeight(newWeight);
-          } else {
-            // convert lbs to kg when storing
-            setWeight(parseFloat((newWeight * 0.453592).toFixed(2)));
-          }
-        }
-      }}
-      className="w-full p-2 border rounded-md text-gray-800"
-      placeholder={`Weight in ${weightUnit}`}
-    />
+        type="number"
+        inputMode="decimal"
+        pattern="[0-9]*"
+        value={displayWeight}
+        onChange={(e) => {
+            const newValue = e.target.value;
+            setDisplayWeight(newValue);
+            if (newValue === "") {
+            setWeight("");
+            } else {
+            const newWeight = Number(newValue);
+            if (weightUnit === "kg") {
+                setWeight(newWeight);
+            } else {
+                setWeight(parseFloat((newWeight * 0.453592).toFixed(2)));
+            }
+            }
+        }}
+        className="w-full p-2 border rounded-md text-gray-800"
+        placeholder={`Weight in ${weightUnit}`}
+        />
     <div className="flex space-x-2">
       <button
         onClick={() => {
