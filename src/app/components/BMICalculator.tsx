@@ -137,7 +137,7 @@ const BMICalculator = () => {
                 const newValue = e.target.value;
                 if (newValue === "" || newValue === "0") {
                     setHeight("");
-                    const { feet, inches } = convertCmToFeetInches(0);
+                    const {} = convertCmToFeetInches(0);
                     setFeet("");
                     setInches("");
                 } else {
