@@ -306,12 +306,20 @@ const BMICalculator = () => {
       </div>
     </div>
 
+    <p className="mt-2 text-lg text-gray-800 mb-6 text-center">
+        {heightUnit === "cm" 
+            ? `${height} cm | ${weightUnit === "kg" ? `${displayWeight} kg` : `${displayWeight} lbs`} | ${age} years old`
+            : `${feet}'${inches}" | ${weightUnit === "kg" ? `${displayWeight} kg` : `${displayWeight} lbs`} | ${age} years old`
+        }
+        </p>
+
     {normalWeightRange && (
       <p className="mt-2 text-lg text-gray-800 mb-6 text-center">
         Normal Weight for Your Height ({height} {heightUnit}): <br />
         <strong>{normalWeightRange[0]} kg - {normalWeightRange[1]} kg</strong>
       </p>
     )}
+
 
     {weightToLose !== null && weightToLose > 0 ? (
     <p className="mt-2 text-lg text-red-500 mb-6 bg-red-100 text-center rounded-md p-2">
@@ -327,6 +335,15 @@ const BMICalculator = () => {
         You are in an acceptable weight range. You just need to maintain and reduce slightly.
     </p>
     ) : null}
+
+    {bmi !== null && (
+        <button
+            onClick={resetForm}
+            className="mt-6 w-full bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-md transition-colors"
+        >
+            Clear
+        </button>
+        )}
 
     <div className="mt-6">
       <h3 className="text-lg font-bold text-gray-800 mb-4">BMI Classification</h3>
@@ -360,14 +377,7 @@ const BMICalculator = () => {
           <span><strong>Obese (Class 3):</strong> BMI ≥ 40.0</span>
         </li>
       </ul>
-      {bmi !== null && (
-        <button
-            onClick={resetForm}
-            className="mt-6 w-full bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-md transition-colors"
-        >
-            Clear
-        </button>
-        )}
+      
     </div>
     
     <div className="mt-8 text-center text-gray-800 text-sm">
