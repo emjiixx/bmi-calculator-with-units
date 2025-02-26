@@ -320,10 +320,28 @@ const BMICalculator = () => {
         </button>
         )}
     </div>
+    
+    <div className="mt-8 text-center text-gray-800 text-sm">
+      <p>
+        Created by{" "}
+        <a 
+          href="https://markjasonp.vercel.app/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600 underline"
+        >
+          Mark Jason Morales
+        </a>
+      </p>
+      <p className="mt-1">© 2025 Mark Jason Morales. All rights reserved.</p>
+    </div>
   </div>
+  
 )}
     </div>
+    
   );
+  
 };
 
 export default BMICalculator;
