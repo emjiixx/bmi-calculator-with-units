@@ -270,7 +270,8 @@ const BMICalculator = () => {
     </p>
     ) : classification === "Normal" ? (
     <p className="mt-2 text-lg text-gray-900 mb-6 font-bold bg-green-500 text-center rounded-md p-2">
-        Congratulations! You don't need to lose weight. You are in the normal weight range. You just need to maintain.
+        Congratulations! You don&apos;t need to lose weight. You are in the normal weight range. 
+        You just need to maintain.
     </p>
     ) : classification === "Acceptable" ? (
     <p className="mt-2 text-lg text-gray-900 mb-6 shadow-md font-bold bg-green-500 rounded-md p-2 text-center">
