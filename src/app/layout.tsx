@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BMI Calculator | Created by @emjiixx",
-  description: "Created by @emjiixx | markjasonp.vercel.app",
+  title: "BMI Calculator | by @emjiixx",
+  description: "BMI Calculator | Created by @emjiixx | markjasonp.online",
 };
 
 export default function RootLayout({

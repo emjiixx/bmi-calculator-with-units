@@ -384,7 +384,7 @@ const BMICalculator = () => {
       <p>
         Created by{" "}
         <a 
-          href="https://markjasonp.vercel.app/" 
+          href="https://www.markjasonp.online/" 
           target="_blank" 
           rel="noopener noreferrer"
           className="text-blue-500 hover:text-blue-600 underline"
