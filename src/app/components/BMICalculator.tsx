@@ -115,13 +115,21 @@ const BMICalculator = () => {
       <div className="mt-4">
         <label className="block font-semibold text-gray-800">Age</label>
         <input
-            type="number"
-            inputMode="decimal"
-            pattern="[0-9]*"
-            value={age}
-            onChange={(e) => setAge(Number(e.target.value))}
-            className="w-full p-2 border rounded-md text-gray-800"
-            />
+          type="number"
+          inputMode="decimal"
+          pattern="[0-9]*"
+          value={age}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            if (newValue === "" || newValue === "0") {
+              setAge("");
+            } else {
+              setAge(Number(newValue));
+            }
+          }}
+          className="w-full p-2 border rounded-md text-gray-800"
+          placeholder="Enter your age"
+        />
       </div>
 
       <div className="mt-4">
