@@ -370,7 +370,7 @@ const BMICalculator = () => {
             alt={gender}
             width={250}
             height={250}
-            className="rounded-md"
+            className="rounded-md justify-center items-center hidden md:block" 
           />
           <span className="text-lg font-semibold mt-2 text-gray-800">
             {gender === "male" ? "♂️ Male" : "♀️ Female"}
