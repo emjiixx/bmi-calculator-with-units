@@ -9,8 +9,8 @@ import { toast, Bounce } from "react-toastify";
 // Add these color constants at the top of your component
 const BMI_COLORS = {
   underweight: "bg-blue-500",
-  normal: "bg-green-500",
-  acceptable: "bg-green-400",
+  normal: "bg-green-400",
+  acceptable: "bg-green-500",
   overweight: "bg-orange-400",
   obeseOne: "bg-orange-500",
   obeseTwo: "bg-orange-600",
@@ -423,7 +423,7 @@ const BMICalculator = () => {
                     Your target weight loss is<br/><strong>{weightToLose} kg</strong><br/> to be in the normal weight range.
                   </p>
                 ) : classification === "Normal" ? (
-                  <p className="mt-2 text-lg text-gray-900 mb-6 font-bold bg-green-500 text-center rounded-md p-2">
+                  <p className="mt-2 text-lg text-gray-900 mb-6 font-bold bg-green-400 text-center rounded-md p-2">
                     Congratulations! You don&apos;t need to lose weight. You are in the normal weight range. 
                     You just need to maintain.
                   </p>
